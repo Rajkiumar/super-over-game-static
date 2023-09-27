@@ -17,7 +17,6 @@ var team2BallsFaced = 0;
 var turn = 1;
 
 const possibleOutcomes = [0, 1, 2, 3, 4, 6, "W"];
-// Iteration 3: Write a Game over function
 function gameOver() {
   gameOverAudio.play();
   if (team1Score > team2Score) alert("IND wins");
@@ -25,7 +24,6 @@ function gameOver() {
   if (team2Score === team1Score) alert("It is another superover!");
 }
 
-// Iteration 4: Write an update score function
 function updateScore() {
   $team1Score.textContent = team1Score;
   $team1Wickets.textContent = team1Wickets;
@@ -33,57 +31,41 @@ function updateScore() {
   $team2Wickets.textContent = team2Wickets;
 }
 
-// Reset button function
 resetButton.onclick = () => {
   window.location.reload();
 };
 
-// Iteration 5: Write a function for Strike button
 strikeButton.onclick = () => {
-  //play audio
   strikeAudio.pause();
   strikeAudio.currentTime = 0;
   strikeAudio.play();
 
-  //generate random strike value
-  const randomElement =
-    possibleOutcomes[Math.floor(Math.random() * possibleOutcomes.length)];
+const randomElement = possibleOutcomes[Math.floor(Math.random() * possibleOutcomes.length)];
 
-  //second batting
-  if (turn === 2) {
-    //increase ball count
+if (turn === 2) {
     team2BallsFaced++;
-    //update score for the ball
-    document.querySelector(
-      `#team2-superover div:nth-child(${team2BallsFaced})`
-    ).textContent = randomElement;
-    // if wicket, update wickets variable
-    if (randomElement === "W") {
-      team2Wickets++;
+    document.querySelector(`#team2-superover div:nth-child(${team2BallsFaced})`).textContent = randomElement;
+if (randomElement === "W") {
+    team2Wickets++;
+}
+else {
+    team2Score += randomElement;
+}
+if (
+    team2BallsFaced === 6 || team2Wickets === 2 || team2Score > team1Score)
+    {
+        turn = 3;
+        gameOver();
     }
-    // else update score
-    else {
-      team2Score += randomElement;
-    }
-    // Game over condition
-    if (
-      team2BallsFaced === 6 ||
-      team2Wickets === 2 ||
-      team2Score > team1Score
-    ) {
-      turn = 3;
-      gameOver();
-    }
-  }
+}
 
-  if (turn === 1) {
+if (turn === 1) {
     team1BallsFaced++;
-    document.querySelector(
-      `#team1-superover div:nth-child(${team1BallsFaced})`
-    ).textContent = randomElement;
-    if (randomElement === "W") {
-      team1Wickets++;
-    } else {
+    document.querySelector( `#team1-superover div:nth-child(${team1BallsFaced})`).textContent = randomElement;
+if (randomElement === "W") {
+    team1Wickets++;
+    }
+    else {
       team1Score += randomElement;
     }
     if (team1BallsFaced === 6 || team1Wickets === 2) turn = 2;
